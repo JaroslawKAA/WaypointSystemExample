@@ -2,7 +2,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WaypointIndicatorController : MonoBehaviour
+public class WaypointIndicatorController : Singleton<WaypointIndicatorController>
 {
     // SERIALIZED
     [Title("Config")]
@@ -36,7 +36,6 @@ public class WaypointIndicatorController : MonoBehaviour
     readonly Vector2 canvasScalerResolution = new(1920, 1080);
 
     // PROPERTIES
-    public static WaypointIndicatorController Instance { get; private set; }
     Transform Target { get; set; }
     Camera Camera { get; set; }
 
@@ -48,7 +47,6 @@ public class WaypointIndicatorController : MonoBehaviour
 
         indicatorImage.enabled = Target != null;
 
-        Instance = this;
         // Let's update after cinemachine main camera updated, because cinamachine works in LateUpdate
         EventBus.onPlayerCameraMoved.AddListener(OnPlayerCameraMoved);
     }
@@ -56,7 +54,6 @@ public class WaypointIndicatorController : MonoBehaviour
 
     void OnDisable()
     {
-        Instance = null;
         EventBus.onPlayerCameraMoved.RemoveListener(OnPlayerCameraMoved);
     }
 
